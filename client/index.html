@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://code.jquery.com/jquery-3.1.1.js"integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+
+  <title>Ajax</title>
+</head>
+<body>
+<h1>Atweet</h1>
+create status : <input type="text" id="tweet">
+<button type="submit" onclick="newTweets()">Tweets</button>
+<table>
+  <tbody id="listTweet"></tbody>
+</table>
+
+<script>
+$.ajax({
+    url: "http://localhost:3000/home",
+    type:"GET",
+    success: function(result) {
+      console.log(result);
+      var temp = ""
+      for(var i=0;i<result.length;i++){
+        temp += `<tr><td>${result[i].text}</td></tr>`
+      }
+      $('#listTweet').append(temp)
+    }
+  })
+
+function newTweets(){
+  $.ajax({
+      url: "http://localhost:3000/home/tweets",
+      type:"POST",
+      data:{
+        keyword:$('#tweet').val()
+      },
+      success: function(result) {
+        $('#listTweet').prepend(`<tr><td>${result.text}</td></tr>`)
+        $('#tweet').val("")
+      }
+    })
+}
+</script>
+
+</body>
+
+</html>
